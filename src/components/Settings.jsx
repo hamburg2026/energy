@@ -109,10 +109,10 @@ export default function Settings() {
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           <button className="btn-secondary" onClick={() => { if (confirm('Beispieldaten laden? Vorhandene Verträge, Rechnungen und Tarife werden ersetzt.')) loadDemo(data) }}>Beispieldaten laden</button>
           <button className="btn-secondary" onClick={() => {
-            if (!confirm(localStorage.getItem('app_pin_hash') ? 'PIN ändern? Du wirst zur PIN-Eingabe weitergeleitet.' : 'PIN-Sperre einrichten?')) return
-            localStorage.removeItem('app_pin_hash'); localStorage.removeItem('pin_skipped'); sessionStorage.removeItem('pin_ok')
+            if (!confirm(localStorage.getItem('energy_pin_hash') ? 'PIN ändern? Du wirst zur PIN-Eingabe weitergeleitet.' : 'PIN-Sperre einrichten?')) return
+            localStorage.removeItem('energy_pin_hash'); localStorage.removeItem('energy_pin_skipped'); sessionStorage.removeItem('energy_pin_ok')
             window.location.reload()
-          }}>🔒 {localStorage.getItem('app_pin_hash') ? 'PIN ändern' : 'PIN einrichten'}</button>
+          }}>🔒 {localStorage.getItem('energy_pin_hash') ? 'PIN ändern' : 'PIN einrichten'}</button>
           <button className="btn-danger" onClick={wipe}>Alle Daten löschen</button>
         </div>
         <p className="muted small">Alle Daten werden ausschließlich lokal in diesem Browser gespeichert (localStorage/IndexedDB). Nutze die Datensicherung, um sie auf ein anderes Gerät zu übertragen.</p>

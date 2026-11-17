@@ -52,7 +52,7 @@ const FOOTER_ITEMS = [
 const ALL_ITEMS = [...NAV_GROUPS.flatMap(g => g.items), ...FOOTER_ITEMS]
 
 // ── PIN-Sperre (wie in der Finanz-App) ─────────────────────────────────
-const PIN_KEY = 'app_pin_hash'
+const PIN_KEY = 'energy_pin_hash' // eigener Schlüssel: alle Apps unter hamburg2026.github.io teilen sich den Speicher
 async function hashPin(pin) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pin + '::energy::2026'))
   return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('')
@@ -68,7 +68,7 @@ function PinScreen({ onUnlocked }) {
   async function submit(e) {
     e.preventDefault()
     if (step === 'enter') {
-      if (await hashPin(pin1) === localStorage.getItem(PIN_KEY)) { sessionStorage.setItem('pin_ok', '1'); onUnlocked() }
+      if (await hashPin(pin1) === localStorage.getItem(PIN_KEY)) { sessionStorage.setItem('energy_pin_ok', '1'); onUnlocked() }
       else { setError('Falscher PIN.'); setPin1('') }
       return
     }
@@ -76,7 +76,7 @@ function PinScreen({ onUnlocked }) {
     if (step === 'set1') { setStep('set2'); setError(''); return }
     if (pin1 !== pin2) { setError('PINs stimmen nicht überein.'); setPin2(''); return }
     localStorage.setItem(PIN_KEY, await hashPin(pin1))
-    sessionStorage.setItem('pin_ok', '1')
+    sessionStorage.setItem('energy_pin_ok', '1')
     onUnlocked()
   }
   const val = step === 'set2' ? pin2 : pin1
@@ -91,7 +91,7 @@ function PinScreen({ onUnlocked }) {
         {error && <p className="pin-error">{error}</p>}
         <button type="submit">{step === 'enter' ? 'Entsperren' : step === 'set1' ? 'Weiter' : 'PIN speichern'}</button>
         {step === 'set1' && (
-          <button type="button" className="btn-link" onClick={() => { sessionStorage.setItem('pin_ok', '1'); onUnlocked() }}>Ohne PIN fortfahren</button>
+          <button type="button" className="btn-link" onClick={() => { sessionStorage.setItem('energy_pin_ok', '1'); onUnlocked() }}>Ohne PIN fortfahren</button>
         )}
       </form>
     </div>
@@ -159,7 +159,7 @@ function Shell() {
             ))}
           </div>
           {localStorage.getItem(PIN_KEY) && (
-            <button className="print-btn" onClick={() => { sessionStorage.removeItem('pin_ok'); window.location.reload() }}>
+            <button className="print-btn" onClick={() => { sessionStorage.removeItem('energy_pin_ok'); window.location.reload() }}>
               <span className="nav-icon">🔒</span> Sperren
             </button>
           )}
@@ -180,9 +180,9 @@ function Shell() {
 
 export default function App() {
   const [unlocked, setUnlocked] = useState(() =>
-    sessionStorage.getItem('pin_ok') === '1' || (!localStorage.getItem(PIN_KEY) && localStorage.getItem('pin_skipped') === '1'))
+    sessionStorage.getItem('energy_pin_ok') === '1' || (!localStorage.getItem(PIN_KEY) && localStorage.getItem('energy_pin_skipped') === '1'))
   if (!unlocked) {
-    return <PinScreen onUnlocked={() => { if (!localStorage.getItem(PIN_KEY)) localStorage.setItem('pin_skipped', '1'); setUnlocked(true) }} />
+    return <PinScreen onUnlocked={() => { if (!localStorage.getItem(PIN_KEY)) localStorage.setItem('energy_pin_skipped', '1'); setUnlocked(true) }} />
   }
   return (
     <DataProvider>

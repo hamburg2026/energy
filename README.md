@@ -32,7 +32,7 @@ npm run build    # Produktions-Build nach dist/
 
 ## Veröffentlichung auf GitHub Pages
 
-1. Im Repository unter **Settings → Pages → Build and deployment → Source** den Eintrag **GitHub Actions** wählen.
+1. Im Repository unter **Settings → Pages → Build and deployment → Source** den Eintrag **GitHub Actions** wählen – nicht „Deploy from a branch“ (dann wird der unkompilierte Quellcode ausgeliefert und die Seite bleibt weiß).
 2. Bei jedem Push auf `main` baut `.github/workflows/deploy.yml` die App (Basis-Pfad `/energy/`) und veröffentlicht sie.
 3. Danach ist die App erreichbar unter `https://<benutzer>.github.io/energy/`. Sie lässt sich als PWA auf dem Home-Bildschirm installieren.
 
